@@ -37,8 +37,15 @@ class Index extends Component{
   // }
   // 滚动位置变化
   adjustScrollTop = ()=>{
-    console.log(this.refs)
-    this.refs.index.scrollTop = window.innerHeight
+    requestAnimationFrame(this.scrollToContent)
+  }
+  scrollToContent = ()=>{
+    if (this.refs.index.scrollTop >= window.innerHeight) {
+      this.refs.index.scrollTop = window.innerHeight
+      return
+    }
+    this.refs.index.scrollTop += 10
+    requestAnimationFrame(this.scrollToContent)
   }
   showMene = ()=>{
     console.log('展开组件')

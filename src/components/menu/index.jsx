@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import './index.styl'
+
+import Person from '../person/index.jsx'
 class Index extends Component{
   state={
     showMenuInfo: false
@@ -9,7 +11,7 @@ class Index extends Component{
       this.setState({
         showMenuInfo: true
       })
-    }, 1000)
+    }, 500)
   }
   closeMene= ()=>{
     // closeMene
@@ -28,18 +30,21 @@ class Index extends Component{
     this.refs.menuInfo.style.left = leftPos - 10 + 'px'
     requestAnimationFrame(this.moveMeneInfo)
   }
+  stopPropagation = (e) => {
+    e.stopPropagation()
+  }
   render(){
     return (
-      <div className="c-menu">
+      <div className="c-menu" onClick={this.closeMene}>
         {
           !this.state.showMenuInfo &&
           <div className='holder-box'></div>
         }
         {
           this.state.showMenuInfo &&
-          <div className='menu-info' ref='menuInfo'>
-            菜单内容
-            <span className='closeMene' onClick={this.closeMene}>close</span>
+          <div className='menu-info' ref='menuInfo' onClick={this.stopPropagation}>
+            <span className='closeMene' onClick={this.closeMene}>X</span>
+            <Person></Person>
           </div>
         }
       </div>
