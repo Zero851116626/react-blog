@@ -1,0 +1,33 @@
+.c-menu
+  position fixed
+  top: 0
+  left 0
+  width: 100vw
+  height: 100vh
+  background-color rgba(0,0,0,.3)
+  .holder-box
+    position absolute
+    left -500px
+    top 0
+    width: 500px
+    height: 100%
+    background-color pink
+    border-radius: 0 50% 50% 0
+    animation: showMenu 1s ease 0s 1
+    animation-fill-mode:forwards;
+  .menu-info
+    position absolute
+    left 0
+    top 0
+    width: 250px
+    height 100%
+    background-color: pink
+
+@keyframes showMenu{
+  0% {
+    left -500px
+  }  
+  100% {
+    left -250px
+  }
+}

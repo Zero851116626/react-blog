@@ -297,6 +297,8 @@ module.exports = function(webpackEnv) {
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
         // Allows for better profiling with ReactDevTools
+        // 配置@
+        '@': path.join(__dirname, '../', 'src'),
         ...(isEnvProductionProfile && {
           'react-dom$': 'react-dom/profiling',
           'scheduler/tracing': 'scheduler/tracing-profiling',
@@ -521,6 +523,10 @@ module.exports = function(webpackEnv) {
             // Make sure to add the new loader(s) before the "file" loader.
           ],
         },
+        {
+          test:/\.(woff|svg|eot|ttf)\??.*$/,
+          loader: 'url-loader?name=fonts/[name].[md5:hash:hex:7].[ext]'
+        }
       ],
     },
     plugins: [
