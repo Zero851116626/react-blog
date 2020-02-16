@@ -26,7 +26,10 @@ const router = [
 		name: 'admin',
 		path: '/admin',
 		component: Admin,
-		exact: false
+		exact: false,
+		children: [
+			
+		]
 	},
 	{
 		name: 'notFound',

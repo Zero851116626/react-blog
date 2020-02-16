@@ -18,7 +18,7 @@ class NavList extends Component{
       },
       {
         title: '管理',
-        path: '/admin',
+        path: '/admin/write',
         name: 'admin'
       },
       {
