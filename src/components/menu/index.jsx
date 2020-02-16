@@ -2,7 +2,9 @@ import React, {Component} from 'react'
 import './index.styl'
 
 import Person from '../person/index.jsx'
-class Index extends Component{
+import NavList from '../navList/index.jsx'
+import NavArticle from '../navArticleType/index.jsx'
+class Menu extends Component{
   state={
     showMenuInfo: false
   }
@@ -38,17 +40,19 @@ class Index extends Component{
       <div className="c-menu" onClick={this.closeMene}>
         {
           !this.state.showMenuInfo &&
-          <div className='holder-box'></div>
+          <div className='holder-box' onClick={(e)=>{e.stopPropagation()}}></div>
         }
         {
           this.state.showMenuInfo &&
           <div className='menu-info' ref='menuInfo' onClick={this.stopPropagation}>
             <span className='closeMene' onClick={this.closeMene}>X</span>
             <Person></Person>
+            <NavList></NavList>
+            <NavArticle></NavArticle>
           </div>
         }
       </div>
     )
   }
 }
-export default Index
+export default Menu

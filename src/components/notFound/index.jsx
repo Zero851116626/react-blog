@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-class Index extends Component{
+class NotFound extends Component{
   render(){
     return (
       <div className="content-not-found">
@@ -8,4 +8,4 @@ class Index extends Component{
     )
   }
 }
-export default Index
+export default NotFound

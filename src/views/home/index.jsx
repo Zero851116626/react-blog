@@ -5,38 +5,22 @@ import './index.styl'
 import Head from '@/components/head/index.jsx'
 import Body from '@/components/body/index.jsx'
 import Menu from '@/components/menu/index.jsx'
-class Index extends Component{
+import ToTop from '@/components/toTop/index.jsx'
+import _ from 'lodash'
+
+class Home extends Component{
   state = {
     currentScrollTop: 0,
     canScroll: true,
-    showMenu: false
+    showMenu: false,
+    muneColor: '#fff'
   }
   componentDidMount(){
     
   }
-  // 动画特效，回头再加
-  // whenScroll = (e)=>{
-  //   let scrollTop = this.refs.index.scrollTop
-  //   if (scrollTop < window.innerHeight) {
-  //     this.setState({
-  //       canScroll: true
-  //     })
-  //   } else {
-  //     this.setState({
-  //       canScroll: false
-  //     })
-  //   }
-  //   // 在首屏，且向下滚动
-  //   if (scrollTop < window.innerHeight && scrollTop - this.state.currentScrollTop > 0) {
-  //     // 触发一个动画
-  //     transition(this.refs.index, 'scrollTop', 1000, window.innerHeight)
-  //   }
-  //   this.setState({
-  //     currentScrollTop: scrollTop
-  //   })
-  // }
   // 滚动位置变化
   adjustScrollTop = ()=>{
+    console.log('滚动事件')
     requestAnimationFrame(this.scrollToContent)
   }
   scrollToContent = ()=>{
@@ -44,8 +28,25 @@ class Index extends Component{
       this.refs.index.scrollTop = window.innerHeight
       return
     }
+    if (this.state.currentScrollTop === this.refs.index.scrollTop && this.state.currentScrollTop) {
+      return
+    }
+    this.setState({
+      currentScrollTop: this.refs.index.scrollTop
+    })
     this.refs.index.scrollTop += 10
     requestAnimationFrame(this.scrollToContent)
+  }
+  scrollToTop = ()=>{
+    requestAnimationFrame(this.scrollToTopFrame)
+  }
+  scrollToTopFrame = ()=>{
+    if (this.refs.index.scrollTop <= 0) {
+      this.refs.index.scrollTop = 0
+      return
+    }
+    this.refs.index.scrollTop -= 40
+    requestAnimationFrame(this.scrollToTopFrame)
   }
   showMene = ()=>{
     console.log('展开组件')
@@ -58,16 +59,32 @@ class Index extends Component{
       showMene: false
     })
   }
+  whenScroll= ()=>{
+    let value = this.refs.index.scrollTop
+    if (value >= window.innerHeight) {
+      if (this.state.muneColor === '#000') return
+      this.setState({
+        muneColor: '#000'
+      })
+    } else {
+      if (this.state.muneColor === '#fff') return
+      this.setState({
+        muneColor: '#fff'
+      })
+    }
+  }
   render(){
     return (
-      // onScroll={_.throttle(this.whenScroll, 200)}
-      <div className="v-index" ref='index'>
+      <div className="v-index" ref='index' onScroll={_.throttle(this.whenScroll, 100)}>
+        {/* 右侧小功能按钮 */}
+        <ToTop scrollToTop={this.scrollToTop}></ToTop>
+
         {/* 欢迎页组件 */}
         <Head adjustScrollTop={this.adjustScrollTop}></Head>
         {/* 内容主题 */}
         <Body></Body>
         {/* 个人中心组件 */}
-        <div className='menu-btn' onClick={this.showMene}>
+        <div className='menu-btn' onClick={this.showMene} style={{'color': this.state.muneColor, 'borderColor': this.state.muneColor}}>
           <span className="iconfont icon-option2"></span>
           <span className='words'>MENU</span>
         </div>
@@ -76,4 +93,4 @@ class Index extends Component{
     )
   }
 }
-export default Index
+export default Home

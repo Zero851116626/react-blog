@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import './index.styl'
 
-class Index extends Component{
+class Head extends Component{
   state= {
     bgImgUrl: '123',
     title: '张一帆博客',
@@ -31,4 +31,4 @@ class Index extends Component{
     )
   }
 }
-export default Index
+export default Head
