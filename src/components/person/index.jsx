@@ -10,10 +10,10 @@ class Index extends Component{
   render(){
     return (
       <div className='c-person-info' style={{'backgroundImage': `url(${this.state.bgImage})`}}>
-        <img className="user-pic" src="" alt=""  />
+        <img className="user-pic" src={this.props.masterInfo.img || ''} alt=""  />
         <div className='user-info'>
-          <div className='user-name'>{this.state.userName}</div>
-          <div className='user-words'>{this.state.userWords}</div>
+          <div className='user-name'>{this.props.masterInfo.name}</div>
+          <div className='user-words'>{this.props.masterInfo.sign}</div>
           <div className='user-num'>文章总数: {this.state.userNum}</div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { withRouter } from 'react-router-dom'
 
+import store from '@/store/index.js'
 
 import './index.styl'
 class NavList extends Component{
@@ -33,7 +34,15 @@ class NavList extends Component{
       const w = window.open()
       w.location.href = 'https://github.com/Zero851116626'
     } else {
-      this.props.history.push(item.path)
+      if (item.name === 'admin') {
+        if (store.getState()){
+          this.props.history.push(item.path)
+        } else {
+          this.props.history.push('/login')
+        }
+      } else {
+        this.props.history.push(item.path)
+      }
     }
   }
   render(){

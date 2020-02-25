@@ -9,6 +9,7 @@ import Home from '@/views/home/index.jsx'
 import Article from '@/views/article/index.jsx'
 import Admin from '@/views/admin/index.jsx'
 import NotFound from '@/views/notFound/index.jsx'
+import Login from '@/views/adminLogin/index.jsx'
 const router = [
 	{
 		name: 'home',
@@ -28,8 +29,14 @@ const router = [
 		component: Admin,
 		exact: false,
 		children: [
-			
+
 		]
+	},
+	{
+		name: 'adminlogin',
+		path: '/login',
+		component: Login,
+		exact: false
 	},
 	{
 		name: 'notFound',

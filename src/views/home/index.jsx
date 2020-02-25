@@ -13,7 +13,8 @@ class Home extends Component{
     currentScrollTop: 0,
     canScroll: true,
     showMenu: false,
-    muneColor: '#fff'
+    muneColor: '#fff',
+    masterInfo: {}
   }
   componentDidMount(){
     

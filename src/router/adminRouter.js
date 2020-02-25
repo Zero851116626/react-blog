@@ -5,7 +5,7 @@ import AdminPerson from '@/components/adminPerson/index.jsx'
 import AdminBlog from '@/components/adminBlog/index.jsx'
 import AdminWrite from '@/components/adminWrite/index.jsx'
 import AdminList from '@/components/adminList/index.jsx'
-import AdminOrther from '@/components/adminOrther/index.jsx'
+import AdminAddRoot from '@/components/adminAddRoot/index.jsx'
 
 
 const routers = [
@@ -35,8 +35,8 @@ const routers = [
   },
   {
     name: 'adminOrther',
-    path: '/orther',
-    component: AdminOrther,
+    path: '/addroot',
+    component: AdminAddRoot,
     exact: true
   }
 ]

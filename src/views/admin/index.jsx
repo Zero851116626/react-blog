@@ -10,6 +10,8 @@ import {
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import routers from '@/router/adminRouter.js'
 
+import store from '@/store'
+
 const { Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 class Admin extends Component{
@@ -17,6 +19,7 @@ class Admin extends Component{
     collapsed: false,
     currentSelected: '2-1',
     openKey: '2',
+    brandArr: [],
     menuContent: [
       {
         name: '信息维护',
@@ -57,28 +60,44 @@ class Admin extends Component{
       {
         name: '其他',
         key: '3',
-        path: '/orther',
-        subMenu: []
+        subMenu: [
+          {
+            name: '新建超管',
+            key: '3-1',
+            path: '/addroot',
+            subMenu: []
+          }
+        ]
       }
     ]
   };
   componentDidMount(){
+    // 检测登陆状态
+    console.log(store.getState())
+    // 刷新时
+    this.checkMenu()
+  }
+  checkMenu =() =>{
     for(let i = 0,l = this.state.menuContent.length; i<l;i++) {
-      debugger
       if (!this.state.menuContent[i].subMenu.length) {
         if (`/admin${this.state.menuContent[i].path}` === this.props.location.pathname) {
+          let arr = []
+          arr.push(this.state.menuContent[i].name)
           this.setState({
             currentSelected: this.state.menuContent[i].key,
-            openKey: this.state.menuContent[i].key
+            openKey: this.state.menuContent[i].key,
+            brandArr: arr
           })
         }
       } else {
         for(let j=0,len=this.state.menuContent[i].subMenu.length; j<len;j++) {
-          debugger
           if (`/admin${this.state.menuContent[i].subMenu[j].path}` === this.props.location.pathname) {
+            let arr = []
+            arr.push(this.state.menuContent[i].name, this.state.menuContent[i].subMenu[j].name)
             this.setState({
               currentSelected: this.state.menuContent[i].subMenu[j].key,
-              openKey: this.state.menuContent[i].key
+              openKey: this.state.menuContent[i].key,
+              brandArr: arr
             })
           }
         }
@@ -88,7 +107,12 @@ class Admin extends Component{
   onCollapse = collapsed => {
     this.setState({ collapsed });
   };
-  clickMenu = (e, obj)=>{
+  clickMenu = (e, item, obj)=>{
+    let arr = []
+    arr.push(item.name, obj.name)
+    this.setState({
+      brandArr: arr
+    })
     this.props.history.push(`${this.props.match.path}${obj.path}`)
   }
   onSelectMenu = (e)=>{
@@ -96,7 +120,7 @@ class Admin extends Component{
       currentSelected: e.key
     })
   }
-  onClickMenu = (e)=>{
+  onClickMenu = (e, item)=>{
     this.setState({
       openKey: e.key
     })
@@ -106,7 +130,7 @@ class Admin extends Component{
       <div className="v-admin">
         <Layout style={{ minHeight: '100vh' }}>
           <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} theme='light'>
-            <div className="logo">博客后台管理</div>
+            <div className="logo" onClick={()=>{this.props.history.push('/')}}>博客后台管理</div>
             <Menu 
               theme="light" 
               selectedKeys={[this.state.currentSelected]} 
@@ -137,7 +161,7 @@ class Admin extends Component{
                         {
                           item.subMenu.map((item2, index2) => {
                             return (
-                              <Menu.Item key={item2.key} onClick={(e)=>{this.clickMenu(e, item2)}}>{item2.name}</Menu.Item>
+                              <Menu.Item key={item2.key} onClick={(e)=>{this.clickMenu(e,item, item2)}}>{item2.name}</Menu.Item>
                             )
                           })
                         }
@@ -151,8 +175,13 @@ class Admin extends Component{
           <Layout>
             <Content style={{ margin: '0 16px' }}>
               <Breadcrumb style={{ margin: '16px 0' }}>
-                <Breadcrumb.Item>User</Breadcrumb.Item>
-                <Breadcrumb.Item>Bill</Breadcrumb.Item>
+                {
+                  this.state.brandArr.length && this.state.brandArr.map((item, index) => {
+                    return (
+                    <Breadcrumb.Item key={index}>{item}</Breadcrumb.Item>
+                    )
+                  })
+                }
               </Breadcrumb>
               <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
                 <Switch>

@@ -4,9 +4,13 @@ import './index.styl'
 import Person from '../person/index.jsx'
 import NavList from '../navList/index.jsx'
 import NavArticle from '../navArticleType/index.jsx'
+import blogInfo from '@/service/blogInfo.js'
+
+import store from '@/store'
 class Menu extends Component{
   state={
-    showMenuInfo: false
+    showMenuInfo: false,
+    masterInfo: {}
   }
   componentDidMount(){
     setTimeout(()=>{
@@ -14,6 +18,11 @@ class Menu extends Component{
         showMenuInfo: true
       })
     }, 500)
+    blogInfo.getMasterInfo().then((data) => {
+      this.setState({
+        masterInfo: data.data.data
+      })
+    })
   }
   closeMene= ()=>{
     // closeMene
@@ -45,8 +54,9 @@ class Menu extends Component{
         {
           this.state.showMenuInfo &&
           <div className='menu-info' ref='menuInfo' onClick={this.stopPropagation}>
+            <span className='log-status' style={{backgroundColor: store.getState() ? '#449766' : '#eee'}}></span>
             <span className='closeMene' onClick={this.closeMene}>X</span>
-            <Person></Person>
+            <Person masterInfo={this.state.masterInfo}></Person>
             <NavList></NavList>
             <NavArticle></NavArticle>
           </div>
