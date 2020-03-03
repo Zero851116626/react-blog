@@ -183,7 +183,7 @@ class Admin extends Component{
                   })
                 }
               </Breadcrumb>
-              <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
+              <div style={{ padding: 0, background: '#fff', minHeight: 360, height: `calc(100vh - 100px)`}}>
                 <Switch>
                   {
                     routers.map((item, index)=>{
@@ -195,7 +195,7 @@ class Admin extends Component{
                 </Switch>
               </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>博客后台管理</Footer>
+            <Footer style={{ textAlign: 'center', paddingBottom: '0' }}>博客后台管理</Footer>
           </Layout>
         </Layout>
       </div>
