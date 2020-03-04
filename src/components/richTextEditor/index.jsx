@@ -13,6 +13,7 @@ class ReactTextEdtor extends Component{
       //   style: {
       //     color: 'red'
       //   }
+      // 默认样式都用css直接控制
       // }
       contentArr: [
       ],
@@ -47,28 +48,19 @@ class ReactTextEdtor extends Component{
     e.target.contentEditable = false
   }
   pressEnter = (e, item, index)=>{
+    // 新增一个回退案件
+    // edited，pop()
+    // writing, pop(),放进writing
     if (e.keyCode !== 13) return
     // 判断在edited 中还是writing中
     e.preventDefault()
-    let contentArr = this.state.contentArr
     if (item && item.id) {
       // edited
-      let domContent = this.refs['edited_' + index].innerHTML
-      item.content = domContent
-      contentArr.splice(index,1,item)
-      this.setState({contentArr})
+      this.dealEdited(item, index)
     } else {
       // writing
       this.scrollWriting()
-      let domContent = this.refs.writing.innerHTML
-      let obj = {
-        id: getUuid(),
-        content: domContent,
-        style: {}
-      }
-      contentArr.push(obj)
-      this.refs.writing.innerHTML = ''
-      this.setState({contentArr})
+      this.dealWriting()
     }
   }
   scrollWriting=()=>{
@@ -76,6 +68,36 @@ class ReactTextEdtor extends Component{
     if ( offsetTop >= (this.state.height / 2)){
       this.refs.articleContent.scrollTop = offsetTop - this.state.height / 2
     }
+  }
+  dealWriting=()=>{
+    let contentArr = this.state.contentArr
+    let domContent = this.refs.writing.innerHTML
+    let obj = {
+      id: getUuid(),
+      content: domContent,
+      style: {}
+    }
+    contentArr.push(obj)
+    this.refs.writing.innerHTML = ''
+    this.setState({contentArr})
+  }
+  writingBlur=()=>{
+    // 区分失焦情况
+    let domContent = this.refs.writing.innerHTML.trim()
+    // 如果没内容，就不新建行了
+    if (!domContent) return
+    this.dealWriting()
+  }
+  dealEdited = (item, index) =>{
+    let contentArr = this.state.contentArr
+    let domContent = this.refs['edited_' + index].innerHTML
+    item.content = domContent
+    contentArr.splice(index,1,item)
+    this.refs['edited_' + index].blur()
+    this.setState({contentArr})
+  }
+  editedBlur = (item, index)=>{
+    this.dealEdited(item, index)
   }
   render(){
     return (
@@ -87,10 +109,18 @@ class ReactTextEdtor extends Component{
           <div className='content' ref='content' onClick={this.clickContent}>
             {this.state.contentArr.length > 0 && this.state.contentArr.map((item,index)=>{
               return (
-                <div className='edited' ref={'edited_'+ index} style={item.style} key={item.id} onClick={this.clickEdited} onBlur={this.editedBlur} onKeyDown={(e)=>{this.pressEnter(e,item,index)}}>{item.content}</div>
+                <div 
+                className='edited' 
+                ref={'edited_'+ index} 
+                style={item.style} 
+                key={item.id} 
+                onClick={this.clickEdited} 
+                onBlur={()=>{this.editedBlur(item, index)}} 
+                onKeyDown={(e)=>{this.pressEnter(e,item,index)}} 
+                dangerouslySetInnerHTML={{'__html': item.content}}></div>
               )
             })}
-            <div className='writing' ref='writing' contentEditable onKeyDown={(e)=>{this.pressEnter(e)}}></div>
+            <div className='writing' ref='writing' contentEditable onKeyDown={(e)=>{this.pressEnter(e)}} onBlur={this.writingBlur}></div>
           </div>
         </div>
       </div>
