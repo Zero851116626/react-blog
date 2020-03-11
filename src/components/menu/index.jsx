@@ -20,7 +20,7 @@ class Menu extends Component{
     }, 500)
     blogInfo.getMasterInfo().then((data) => {
       this.setState({
-        masterInfo: data.data.data
+        masterInfo: data.data
       })
     })
   }

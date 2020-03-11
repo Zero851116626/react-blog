@@ -1,0 +1,27 @@
+.c-article-list
+  height: calc(100% - 20px)
+  padding: 20px 20px 0
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start
+  .left-list
+    height: 100%;
+    width: 65%
+    overflow: auto
+    .item
+      height: 26px;
+      line-height: 26px
+      font-size 24px
+      background-color skyblue
+      display: flex
+      justify-content: space-between
+      align-items: center
+      margin-bottom: 14px;
+      cursor pointer
+      .time
+        font-size 16px
+    &::-webkit-scrollbar
+      display: none
+  .right-list
+    width: 30%
+    background-color pink

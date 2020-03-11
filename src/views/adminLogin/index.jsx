@@ -20,7 +20,7 @@ class AdminLogin extends Component{
         console.log('Received values of form: ', values);
         adminService.userLogin(values.username, values.password)
           .then((data)=>{
-            window.localStorage.setItem('token', data.data.token)
+            window.localStorage.setItem('token', data.token)
             store.dispatch({
               type: 'Login'
             })

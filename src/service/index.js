@@ -2,9 +2,13 @@
 import axios from 'axios'
 
 axios.interceptors.request.use(config => {
-  console.log(config)
   const token = window.localStorage.getItem('token')
   if (token) {
     config.headers = Object.assign(config.headers, {token: token})
   }
+  return config
+})
+
+axios.interceptors.response.use(response => {
+  return Promise.resolve(response.data); 
 })

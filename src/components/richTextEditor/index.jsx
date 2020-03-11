@@ -2,6 +2,22 @@ import React, {Component} from 'react'
 import './index.styl'
 
 import getUuid from '@/utils/uuid.js'
+const fontStyle = [
+  {
+    name: 'H1',
+    style: {
+      fontSize: '2em',
+      fontWeight: 'bold'
+    }
+  },
+  {
+    name: 'H2',
+    style: {
+      fontSize: '1.5em',
+      fontWeight: 'bold'
+    }
+  }
+]
 class ReactTextEdtor extends Component{
   constructor(props){
     super()
@@ -17,7 +33,8 @@ class ReactTextEdtor extends Component{
       // }
       contentArr: [
       ],
-      height: 0
+      height: 0,
+      currentDom: ''
     }
     this.props = props
   }
@@ -31,6 +48,9 @@ class ReactTextEdtor extends Component{
   clickContent = (e)=>{
     // 做聚焦，
     this.refs.writing.focus()
+    this.setState({
+      currentDom: this.refs.writing
+    })
   }
   clickEdited = (e)=>{
     e.stopPropagation()
@@ -41,26 +61,46 @@ class ReactTextEdtor extends Component{
       let range = window.getSelection()
       range.selectAllChildren(e.target)
       range.collapseToEnd()
+      this.setState({
+        currentDom: dom
+      })
     }
   }
   editedBlur = (e)=>{
     e.stopPropagation()
     e.target.contentEditable = false
   }
-  pressEnter = (e, item, index)=>{
-    // 新增一个回退案件
-    // edited，pop()
-    // writing, pop(),放进writing
-    if (e.keyCode !== 13) return
-    // 判断在edited 中还是writing中
-    e.preventDefault()
-    if (item && item.id) {
-      // edited
-      this.dealEdited(item, index)
-    } else {
-      // writing
-      this.scrollWriting()
-      this.dealWriting()
+  pressKey = (e, item, index)=>{
+    if (e.keyCode === 13) {
+      // 判断在edited 中还是writing中
+      e.preventDefault()
+      if (item && item.id) {
+        // edited
+        this.dealEdited(item, index)
+      } else {
+        // writing
+        this.scrollWriting()
+        this.dealWriting()
+      }
+    } else if (e.keyCode === 8){
+      // 退格键
+      if (e.target.innerHTML) return
+      // 如果退完了
+      if (this.state.contentArr.length === 0) return
+      if (item && item.id){
+        let arr = this.state.contentArr
+        arr.splice(index,1)
+        this.setState({
+          contentArr: arr
+        })
+        setTimeout(()=>{
+          let dom = this.refs['edited_' + (index - 1)]
+          if (dom){
+            dom.contentEditable = true
+            dom.focus()
+          }
+        }, 0)
+      }
     }
   }
   scrollWriting=()=>{
@@ -99,11 +139,26 @@ class ReactTextEdtor extends Component{
   editedBlur = (item, index)=>{
     this.dealEdited(item, index)
   }
+  changeFontSize=(item)=>{
+    // 为当前选中的节点增加样式
+    Object.assign(this.state.currentDom.style, item.style)
+  }
   render(){
     return (
       <div className='zyf-editor'>
         <div className='header'>
           <input className='title-input' placeholder='请输入标题'/>
+        </div>
+        <div className='tools'>
+          <div className='tool font-size'>
+            {
+              fontStyle.map((item, index)=>{
+                return (
+                  <span onClick={()=>{this.changeFontSize(item)}} key={index}>{item.name}</span>
+                )
+              })
+            }
+          </div>
         </div>
         <div className='article-content' ref='articleContent'>
           <div className='content' ref='content' onClick={this.clickContent}>
@@ -116,11 +171,11 @@ class ReactTextEdtor extends Component{
                 key={item.id} 
                 onClick={this.clickEdited} 
                 onBlur={()=>{this.editedBlur(item, index)}} 
-                onKeyDown={(e)=>{this.pressEnter(e,item,index)}} 
+                onKeyDown={(e)=>{this.pressKey(e,item,index)}} 
                 dangerouslySetInnerHTML={{'__html': item.content}}></div>
               )
             })}
-            <div className='writing' ref='writing' contentEditable onKeyDown={(e)=>{this.pressEnter(e)}} onBlur={this.writingBlur}></div>
+            <div className='writing' ref='writing' contentEditable onKeyDown={(e)=>{this.pressKey(e)}} onBlur={this.writingBlur}></div>
           </div>
         </div>
       </div>

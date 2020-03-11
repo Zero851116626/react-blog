@@ -16,5 +16,25 @@ export default {
       username: userName,
       password: password
     })
+  },
+  createArticle(params){
+    return axios.post(`${baseUrl}/article`, {
+      title: params.title,
+      content: params.content,
+      setTop: params.setTop,
+      tagTypeId: params.tagTypeId|| ''
+    })
+  },
+  getTagList(){
+    return axios.get(`${baseUrl}/article/taglist`)
+  },
+  getArticleList(){
+    return axios.get(`${baseUrl}/article/list`)
+  },
+  createNewTag(name, color){
+    return axios.post(`${baseUrl}/article/newtag`, {
+      tagName: name,
+      color: color
+    })
   }
 }
